@@ -3,7 +3,7 @@
     "firebase-tools": "^11.0.1"
   },
   "scripts": {
-    "build": "cd functions/; tsc; cd ..",
+    "build": "cd functions/; tsc; cd ../public",
     "serve": "npm run build && firebase emulators:start",
     "deploy": "npm run build && firebase deploy"
   }
