@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "firebase-tools": "^11.0.1"
+  },
+  "scripts": {
+    "build": "cd functions/; tsc; cd ..",
+    "serve": "npm run build && firebase emulators:start",
+    "deploy": "npm run build && firebase deploy"
+  }
+}
