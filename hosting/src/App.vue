@@ -1,119 +1,77 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
+// import { RouterLink, RouterView } from 'vue-router'
+import { initializeApp } from 'firebase/app';
+import { getDatabase, connectDatabaseEmulator, set, ref as dbref, onValue } from "firebase/database";
+import { ref } from 'vue';
+
+import WidgetSmall from '@/components/WidgetSmall.vue';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBEcuAsfb-kf77UJF0kStJDy6CsQbvP0KQ",
+  authDomain: "insektenhotel.firebaseapp.com",
+  databaseURL: "https://insektenhotel-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "insektenhotel",
+  storageBucket: "insektenhotel.appspot.com",
+  messagingSenderId: "1089583413049",
+  appId: "1:1089583413049:web:119e9f4d586e75502b1ae8"
+};
+const app = initializeApp(firebaseConfig);
+
+const database = getDatabase();
+if (location.hostname === "localhost") {
+  // Point to the RTDB emulator running on localhost.
+  connectDatabaseEmulator(database, "localhost", 9000);
+} 
+
+const currentDataDataObj = ref(null)
+const historyDataObj = ref(null)
+
+const currentDataDBRef = dbref(database, 'currentData/');
+onValue(currentDataDBRef, (snapshot) => {
+  const val = snapshot.val()
+  currentDataDataObj.value = val
+});
+
+const historyDBRef = dbref(database, 'history/');
+onValue(historyDBRef, (snapshot) => {
+  const val = snapshot.val()  
+  historyDataObj.value = val
+});
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <!-- <table>
+    <tbody>
+        <tr v-for="(item, key) in currentDataDataObj">
+            <td>{{ key }}: </td>
+            <td>{{ item }}</td>
+        </tr>
+    </tbody>
+  </table> -->
+  <!-- <h1 v-for="dataPoint in historyDataObj">{{ dataPoint }}</h1> -->
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <widget-small></widget-small>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <table>
+    <thead>
+        <tr>
+            <th v-for="(item, key) in currentDataDataObj">{{ key }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="dataPoint in historyDataObj">
+            <td v-for="item in dataPoint">{{ item }}</td>
+        </tr>
+    </tbody>
+  </table>
 </template>
 
-<style>
-@import '@/assets/base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+<style lang="scss">
+table {
+  td, th {
+    padding: 0.5em 2em;
+    border: 1px solid hsl(0, 0%, 30%)
   }
 }
 </style>
