@@ -9,9 +9,11 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "chart.js": "^3.8.0",
     "firebase": "^9.8.3",
     "pinia": "^2.0.14",
     "vue": "^3.2.36",
+    "vue-chart-3": "^3.1.8",
     "vue-router": "^4.0.15"
   },
   "devDependencies": {
