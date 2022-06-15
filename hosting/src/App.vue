@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase();
 if (location.hostname === "localhost") {
   // Point to the RTDB emulator running on localhost.
-  connectDatabaseEmulator(database, "localhost", 9000);
+  // connectDatabaseEmulator(database, "localhost", 9000);
 }
 
 const currentData = ref({})
@@ -134,7 +134,7 @@ onValue(historyDBRef, (snapshot) => {
   display: inline-table;
   margin: 0 50px;
 
-  td, th {
+  &::v-deep(td), &::v-deep(th) {
     padding: 0.5em 2em;
     border: 1px solid hsl(0, 0%, 30%)
   }
