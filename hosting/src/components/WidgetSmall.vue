@@ -12,13 +12,19 @@ const props = defineProps({
   data: {
     type: Array,
     required: true
+  },
+  labels: {
+    type: Array,
+    required: true
   }
 })
+
 const dataArray = toRef(props, 'data')
+const labelsArray = toRef(props, 'labels')
 
 const labels = computed(() => {
-  return dataArray.value.map(item => {
-    return "Label"
+  return labelsArray.value.map(isodata => {
+    return new Date(isodata).getTime();
   })
 })
 
@@ -26,7 +32,7 @@ const data = computed(() => {
   return {
     labels: labels.value,
     datasets: [{
-      data: dataArray.value.reverse(),
+      data: dataArray.value,
       tension: 0.3,
       pointRadius: 0,
       borderColor: 'rgb(75, 192, 192)',
@@ -34,25 +40,31 @@ const data = computed(() => {
   }
 })
 
-const options = {
-  layout: {
-      padding: 20
-  },
-  scales: {
-    x: {
-      display: false
+const options = computed(() => {
+  return {
+    layout: {
+        padding: 20
     },
-  //   y: {
-  //     display: false,
-  //   }
-  },
-  plugins: {
-    legend: {
-      display: false
-    }
-  },
-  events: []
-}
+    scales: {
+      x: {
+        display: false,
+        type: 'linear',
+        min: Math.min(...labels.value),
+        max: Math.max(...labels.value)
+        
+      },
+    //   y: {
+    //     display: false,
+    //   }
+    },
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    events: []
+  }
+})
 
 const asAny = (foo: any) => foo as any;
 </script>

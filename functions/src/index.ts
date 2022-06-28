@@ -12,14 +12,17 @@ exports.pushData = functions
     try {
 
         // Verify login data in basic auth header
-        const username = process.env.BASIC_AUTH_USERNAME
-        const password = process.env.BASIC_AUTH_PASSWORD
+        const logins = process.env.BASIC_AUTH_LOGINS?.replace(" ", "").split(",")
+        
+        const authTokens = logins?.map(login => (
+            `Basic ${Buffer.from(login).toString('base64')}`
+        ))
 
-        const authToken = Buffer.from(`${username}:${password}`).toString('base64')
-
-        if (req.headers.authorization !== `Basic ${authToken}`) {
+        if (req.headers.authorization === undefined || !authTokens?.includes(req.headers.authorization)) {
             throw new Error('Auth Error: Basic Auth failed')
         }
+
+        const username = new Buffer(req.headers.authorization.replace("Basic ", ""), 'base64').toString('ascii').split(':')[0]
 
 
         // Grab relevant data from the data recieved 
@@ -47,12 +50,12 @@ exports.pushData = functions
 
         let databaseError
         // replace old data in /currentData
-        admin.database().ref('/currentData').set(databaseEntry, (error) => {
+        admin.database().ref(`/${username}/currentData`).set(databaseEntry, (error) => {
             databaseError = error
         }) 
 
         // Push new element to /history
-        admin.database().ref('/history').push().set(databaseEntry, (error) => {
+        admin.database().ref(`/${username}/history`).push().set(databaseEntry, (error) => {
             databaseError = error
         }) 
 

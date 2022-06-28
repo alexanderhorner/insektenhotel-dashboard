@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // import { RouterLink, RouterView } from 'vue-router'
 import { initializeApp } from 'firebase/app';
-import { getDatabase, connectDatabaseEmulator, set, ref as dbref, onValue } from "firebase/database";
+import { getDatabase, connectDatabaseEmulator, set, ref as dbref, onValue, orderByChild, query, startAt } from "firebase/database";
 import { ref } from 'vue';
 
 import WidgetSmall from '@/components/WidgetSmall.vue';
@@ -26,18 +26,18 @@ if (location.hostname === "localhost") {
 const currentData = ref({})
 const history = ref(new Array)
 const datafields = ref(new Array())
-const historyGroupedByFieled = ref(new Array()) // convert to obj
+const historyGroupedByFieled = ref({})
 
-const temperature_1 = ref(new Array)
-
-const currentDataDBRef = dbref(database, 'currentData/');
+const currentDataDBRef = dbref(database, '/Insektenhotel1/currentData/');
 onValue(currentDataDBRef, (snapshot) => {
   const val = snapshot.val();
   currentData.value = val
 });
 
-const historyDBRef = dbref(database, 'history/');
-onValue(historyDBRef, (snapshot) => {
+
+const before24Hour = new Date(new Date().getTime() - (24 * 3600 * 1000)).toISOString();
+const last24hoursRef = query(dbref(database, '/Insektenhotel1/history/'), orderByChild('timestamp'), startAt(before24Hour))
+onValue(last24hoursRef, (snapshot) => {
   const rawDatabaseEntry: Object = snapshot.val();
 
   let allEntriesRaw = Object.values(rawDatabaseEntry).reverse()
@@ -66,22 +66,23 @@ onValue(historyDBRef, (snapshot) => {
 
 
   historyGroupedByFieled.value = (() => {
-    return Object.entries(templateEntry).map(([datafield, item]) => {
-      return allEntries.map(entry => entry[datafield])
+    let object = {}
+    Object.keys(templateEntry).forEach(datafield => {
+      object[datafield] = allEntries.map(entry => entry[datafield])
     })
+    return object
   })()
-
-  // console.log(historyGroupedByFieled)
-
 })
 
 </script>
 
 <template>
   <!-- <widget-small :data="temperature_1"></widget-small> -->
-  <div v-for="(item, key) in datafields">
-    <h1>{{ item }}:</h1>
-    <widget-small :data="historyGroupedByFieled[key]"></widget-small>
+  <div v-for="item in datafields">
+    <template v-if="item != 'timestamp'">
+      <h1>{{ item }}:</h1>
+      <widget-small :labels="historyGroupedByFieled['timestamp']" :data="historyGroupedByFieled[item]"></widget-small>
+    </template>
   </div>
   
 
@@ -120,7 +121,7 @@ onValue(historyDBRef, (snapshot) => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .ml-50px, h1 {
   margin-left: 50px;
 }
@@ -134,7 +135,8 @@ onValue(historyDBRef, (snapshot) => {
   display: inline-table;
   margin: 0 50px;
 
-  &::v-deep(td), &::v-deep(th) {
+  // &::v-deep(td), &::v-deep(th) {
+  td, th {
     padding: 0.5em 2em;
     border: 1px solid hsl(0, 0%, 30%)
   }
