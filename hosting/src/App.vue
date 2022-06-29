@@ -68,20 +68,25 @@ onValue(last24hoursRef, (snapshot) => {
   historyGroupedByFieled.value = (() => {
     let object = {}
     Object.keys(templateEntry).forEach(datafield => {
+      // @ts-ignore
       object[datafield] = allEntries.map(entry => entry[datafield])
     })
     return object
   })()
 })
 
+const asAny = (foo: any) => foo as any;
+
 </script>
 
 <template>
+  <h1>Letze 24 Stunden</h1>
+
   <!-- <widget-small :data="temperature_1"></widget-small> -->
   <div v-for="item in datafields">
     <template v-if="item != 'timestamp'">
-      <h1>{{ item }}:</h1>
-      <widget-small :labels="historyGroupedByFieled['timestamp']" :data="historyGroupedByFieled[item]"></widget-small>
+      <h2>{{ item }}:</h2>
+      <widget-small :labels="asAny(historyGroupedByFieled)['timestamp']" :data="asAny(historyGroupedByFieled)[item]"></widget-small>
     </template>
   </div>
   
@@ -122,7 +127,11 @@ onValue(last24hoursRef, (snapshot) => {
 </template>
 
 <style lang="scss">
-.ml-50px, h1 {
+h1 {
+  margin-left: 45px;
+}
+
+.ml-50px, h2 {
   margin-left: 50px;
 }
 .table-wrapper {

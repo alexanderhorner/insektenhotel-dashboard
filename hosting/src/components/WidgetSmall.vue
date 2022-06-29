@@ -23,17 +23,23 @@ const dataArray = toRef(props, 'data')
 const labelsArray = toRef(props, 'labels')
 
 const labels = computed(() => {
-  return labelsArray.value.map(isodata => {
+  return labelsArray.value.map((isodata) => {
+    // @ts-ignore
     return new Date(isodata).getTime();
+  })
+})
+
+const pointData = computed(() => {
+  return labels.value.map((label, index) => {
+    return {x: label, y: dataArray.value[index]}
   })
 })
 
 const data = computed(() => {
   return {
-    labels: labels.value,
     datasets: [{
-      data: dataArray.value,
-      tension: 0.3,
+      data: pointData.value,
+      tension: 0.05,
       pointRadius: 0,
       borderColor: 'rgb(75, 192, 192)',
     }]
@@ -42,6 +48,8 @@ const data = computed(() => {
 
 const options = computed(() => {
   return {
+    animation: false,
+    parsing: false,
     layout: {
         padding: 20
     },
@@ -60,6 +68,12 @@ const options = computed(() => {
     plugins: {
       legend: {
         display: false
+      },
+      decimation: {
+        enabled: true,
+        algorithm: "lttb",
+        samples: 200,
+        threshold: 200
       }
     },
     events: []
