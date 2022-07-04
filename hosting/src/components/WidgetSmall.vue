@@ -3,6 +3,7 @@
 // import { LineChart } from 'vue-chart-3'
 // Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement)
 
+import { ASAP } from 'downsample';
 import { LineChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
 import { computed, ref, toRef, watch } from 'vue';
@@ -29,17 +30,31 @@ const labels = computed(() => {
   })
 })
 
+// const smoothingFunction = createASAP({
+//   x: (point) => number,
+//   y: (point) => number,
+//   toPoint: (x, y) => P
+// })
+
 const pointData = computed(() => {
-  return labels.value.map((label, index) => {
-    return {x: label, y: dataArray.value[index]}
+
+  const movingAverage = dataArray.value.map((value, index) => {
+    const data = dataArray.value as number[]
+    const lastXElements = data.slice(Math.max(0, index - 40), index)
+    const average = lastXElements.reduce((a,b) => a + b, 0) / lastXElements.length || value;
+    return average
   })
+
+  return labels.value.map((label, index) => (
+    {x: label, y: movingAverage[index]}
+  ))
 })
 
 const data = computed(() => {
   return {
     datasets: [{
       data: pointData.value,
-      tension: 0.05,
+      tension: 0.3,
       pointRadius: 0,
       borderColor: 'rgb(75, 192, 192)',
     }]
@@ -72,8 +87,8 @@ const options = computed(() => {
       decimation: {
         enabled: true,
         algorithm: "lttb",
-        samples: 200,
-        threshold: 200
+        samples: 250,
+        threshold: 250
       }
     },
     events: []

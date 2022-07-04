@@ -3,15 +3,25 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check build-only",
+    "build": "run-p type-check build-only && react-snap",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit"
   },
+  "reactSnap": {
+    "source": "dist",
+    "waitFor": 5000,
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false
+    }
+  },
   "dependencies": {
     "chart.js": "^3.8.0",
+    "downsample": "^1.4.0",
     "firebase": "^9.8.3",
     "pinia": "^2.0.14",
+    "react-snap": "^1.23.0",
     "vue": "^3.2.36",
     "vue-chart-3": "^3.1.8",
     "vue-router": "^4.0.15"
