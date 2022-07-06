@@ -76,10 +76,70 @@ onValue(last24hoursRef, (snapshot) => {
 })
 
 const asAny = (foo: any) => foo as any;
-
 </script>
 
 <template>
+
+  <h1 class="live-data-header">Live Daten:</h1>
+
+
+  <div class="currentData">
+
+    <div class="currentData-item">
+      <div class="currentData-name">Temperatur 1</div>
+      <div class="currentdata-val">{{ currentData.temperature_1 }}°C</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Temperatur 2</div>
+      <div class="currentdata-val">{{ currentData.temperature_2 }}°C</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Temperatur 3</div>
+      <div class="currentdata-val">{{ currentData.temperature_3 }}°C</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Temperatur 4</div>
+      <div class="currentdata-val">{{ currentData.temperature_4 }}°C</div>
+    </div>
+
+
+    <div class="currentData-item">
+      <div class="currentData-name">Helligkeit 1</div>
+      <div class="currentdata-val">{{ currentData.luminosity_1 }} lx</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Helligkeit 2</div>
+      <div class="currentdata-val">{{ currentData.luminosity_2 }} lx</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Helligkeit 3</div>
+      <div class="currentdata-val">{{ currentData.luminosity_3 }} lx</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Helligkeit 4</div>
+      <div class="currentdata-val">{{ currentData.luminosity_4 }} lx</div>
+    </div>
+
+
+    <div class="currentData-item">
+      <div class="currentData-name">Luftfeuchtigkeit 1</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Luftfeuchtigkeit 2</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Luftfeuchtigkeit 3</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+    </div>
+    <div class="currentData-item">
+      <div class="currentData-name">Luftfeuchtigkeit 4</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+    </div>
+
+  </div>
+
   <h1>Letze 24 Stunden</h1>
 
   <!-- <widget-small :data="temperature_1"></widget-small> -->
@@ -92,7 +152,7 @@ const asAny = (foo: any) => foo as any;
   
 
 
-  <h1>Gerade eben: </h1>
+  <!-- <h1>Gerade eben: </h1>
 
   <div class="table-wrapper">
     <table class="table">
@@ -107,7 +167,7 @@ const asAny = (foo: any) => foo as any;
           </tr>
       </tbody>
     </table>
-  </div>
+  </div> -->
 
   <h1>Verlauf:</h1>
   <div class="table-wrapper">
@@ -127,6 +187,45 @@ const asAny = (foo: any) => foo as any;
 </template>
 
 <style lang="scss">
+.live-data-header {
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+.currentData {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, 200px) 1fr;
+  column-gap: 70px;
+  margin-bottom: 150px;
+
+  .currentData-item {
+    margin-top: 20px;
+
+    .currentData-name {
+      color: hsl(0, 0%, 60%);
+    }
+    .currentdata-val {
+      font-size: 50px;
+    }
+
+    &:nth-of-type(4n + 1) {
+      grid-column: 2;
+      width: 300px;
+    }
+    &:nth-of-type(4n + 2) {
+      grid-column: 3;
+    }
+    &:nth-of-type(4n + 3) {
+      grid-column: 4;
+    }
+    &:nth-of-type(4n + 4) {
+      grid-column: 5;
+    }
+
+  }
+}
+
+
 h1 {
   margin-left: 45px;
 }

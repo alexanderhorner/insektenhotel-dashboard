@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check build-only && react-snap",
+    "build": "run-p build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit"
   },
   "reactSnap": {
     "source": "dist",
-    "waitFor": 5000,
+    "waitFor": 1,
     "minifyHtml": {
       "collapseWhitespace": false,
       "removeComments": false
