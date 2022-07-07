@@ -1,12 +1,11 @@
-<script setup lang="ts">
+<script setup>
 // import { Chart, LineController, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 // import { LineChart } from 'vue-chart-3'
 // Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement)
 
-import { ASAP } from 'downsample';
 import { LineChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
-import { computed, ref, toRef, watch } from 'vue';
+import { computed, toRef } from 'vue';
 Chart.register(...registerables);
 
 const props = defineProps({
@@ -39,7 +38,7 @@ const labels = computed(() => {
 const pointData = computed(() => {
 
   const movingAverage = dataArray.value.map((value, index) => {
-    const data = dataArray.value as number[]
+    const data = dataArray.value
     const lastXElements = data.slice(Math.max(0, index - 40), index)
     const average = lastXElements.reduce((a,b) => a + b, 0) / lastXElements.length || value;
     return average
@@ -94,13 +93,11 @@ const options = computed(() => {
     events: []
   }
 })
-
-const asAny = (foo: any) => foo as any;
 </script>
 
 <template>
   <div class="root">
-    <LineChart class="chart" :chartData="asAny(data)" :options="options"/>
+    <LineChart class="chart" :chartData="data" :options="options"/>
   </div>
 </template>
 

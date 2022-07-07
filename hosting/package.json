@@ -1,39 +1,20 @@
 {
-  "name": "insektenhotel",
+  "name": "smartes-insektenhotel",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "run-p build-only",
-    "preview": "vite preview --port 4173",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
-  },
-  "reactSnap": {
-    "source": "dist",
-    "waitFor": 1,
-    "minifyHtml": {
-      "collapseWhitespace": false,
-      "removeComments": false
-    }
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
   },
   "dependencies": {
-    "chart.js": "^3.8.0",
-    "downsample": "^1.4.0",
-    "firebase": "^9.8.3",
-    "pinia": "^2.0.14",
-    "react-snap": "^1.23.0",
-    "vue": "^3.2.36",
+    "firebase": "^9.8.4",
+    "sass": "^1.53.0",
+    "vue": "^3.2.37",
     "vue-chart-3": "^3.1.8",
-    "vue-router": "^4.0.15"
+    "vue-router": "^4.0.16"
   },
   "devDependencies": {
-    "@types/node": "^16.11.36",
     "@vitejs/plugin-vue": "^2.3.3",
-    "@vue/tsconfig": "^0.1.3",
-    "npm-run-all": "^4.1.5",
-    "sass": "^1.52.3",
-    "typescript": "~4.7.2",
-    "vite": "^2.9.9",
-    "vue-tsc": "^0.35.2"
+    "vite": "^2.9.12"
   }
 }
