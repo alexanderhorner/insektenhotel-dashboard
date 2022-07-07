@@ -127,15 +127,15 @@ onValue(last24hoursRef, (snapshot) => {
     </div>
     <div class="currentData-item">
       <div class="currentData-name">Luftfeuchtigkeit 2</div>
-      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_2 }}%</div>
     </div>
     <div class="currentData-item">
       <div class="currentData-name">Luftfeuchtigkeit 3</div>
-      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_3 }}%</div>
     </div>
     <div class="currentData-item">
       <div class="currentData-name">Luftfeuchtigkeit 4</div>
-      <div class="currentdata-val">{{ currentData.relative_humidity_1 }}%</div>
+      <div class="currentdata-val">{{ currentData.relative_humidity_4 }}%</div>
     </div>
 
   </div>
@@ -146,7 +146,7 @@ onValue(last24hoursRef, (snapshot) => {
   <div v-for="item in datafields">
     <template v-if="item != 'timestamp'">
       <h2>{{ item }}:</h2>
-      <widget-small :labels="asAny(historyGroupedByFieled)['timestamp']" :data="asAny(historyGroupedByFieled)[item]"></widget-small>
+      <widget-small :labels="historyGroupedByFieled['timestamp']" :data="historyGroupedByFieled[item]"></widget-small>
     </template>
   </div>
   

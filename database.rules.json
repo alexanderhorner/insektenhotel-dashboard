@@ -1,7 +1,14 @@
 {
     "rules": {
-        ".read": true,
+        ".read": false,
         ".write": false,
-        ".indexOn": "timestamp"
+        "$accounts": {
+			"history": {
+                ".indexOn": "timestamp"
+            }
+        },
+        "Bayernlab1": {
+            ".read": true
+        }
     }
 }
